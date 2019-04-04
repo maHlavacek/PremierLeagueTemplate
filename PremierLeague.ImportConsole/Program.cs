@@ -53,9 +53,11 @@ namespace PremierLeague.ImportConsole
 
                 Log.Information("Datenbank löschen");
                 // TODO: Datenbank löschen
+                unitOfWork.DeleteDatabase();
 
                 Log.Information("Datenbank migrieren");
                 // TODO: Datenbank migrieren
+                unitOfWork.MigrateDatabase();
 
                 Log.Information("Spiele werden von premierleague.csv eingelesen");
                 var games = ImportController.ReadFromCsv().ToArray();
@@ -68,12 +70,15 @@ namespace PremierLeague.ImportConsole
                     Log.Debug($"  Es wurden {games.Count()} Spiele eingelesen!");
 
                     // TODO: Teams aus den Games ermitteln
-                    var teams = Enumerable.Empty<Team>();
+                    var teams = games.Select(s => s.HomeTeam).Distinct();// Enumerable.Empty<Team>();
                     Log.Debug($"  Es wurden {teams.Count()} Teams eingelesen!");
 
                     Log.Information("Daten werden in Datenbank gespeichert (in Context übertragen)");
 
                     // TODO: Teams/Games in der Datenbank speichern
+                    unitOfWork.Games.AddRange(games);
+                    unitOfWork.Teams.AddRange(teams);
+                    unitOfWork.SaveChanges();
                     Log.Information("Daten wurden in DB gespeichert!");
                 }
             }
