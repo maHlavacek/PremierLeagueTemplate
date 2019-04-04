@@ -86,7 +86,11 @@ namespace PremierLeague.ImportConsole
 
         private static void AnalyzeData()
         {
-            throw new NotImplementedException();
+            using (UnitOfWork unitOfWork = new UnitOfWork())
+            {
+              //  var teamWithTheMostShootedGoals = unitOfWork.Games.GetAllWithTeams().GroupBy(gb => gb.HomeTeamId).Max(m => m.HomeGoals + m.GuestGoals);
+            }
+                
         }
 
         /// <summary>
