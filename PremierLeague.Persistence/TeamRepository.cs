@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PremierLeague.Core.Contracts;
 using PremierLeague.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,22 @@ namespace PremierLeague.Persistence
         public TeamRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public (Team team, int goals) GetTheTeamWithTheMostSchootedGoals()
+        {
+
+            return _dbContext.Teams.Select(t => ValueTuple.Create(t, t.HomeGames.Sum(h => h.HomeGoals) + t.AwayGames.Sum(a => a.GuestGoals)))
+                .OrderByDescending(t => t.Item2)
+                .FirstOrDefault();
+
+            //return _dbContext.Teams.Select(s => new
+            //{
+            //    Goals = s.HomeGames.Sum(w => w.HomeGoals) + s.AwayGames.Sum(w => w.GuestGoals),
+            //    Team = s.Name
+            //}
+            //);
+                        
         }
 
 
@@ -40,6 +57,5 @@ namespace PremierLeague.Persistence
         {
             _dbContext.Teams.Add(team);
         }
-
     }
 }

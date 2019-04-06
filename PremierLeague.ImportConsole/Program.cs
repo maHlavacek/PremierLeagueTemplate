@@ -88,7 +88,8 @@ namespace PremierLeague.ImportConsole
         {
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-              //  var teamWithTheMostShootedGoals = unitOfWork.Games.GetAllWithTeams().GroupBy(gb => gb.HomeTeamId).Max(m => m.HomeGoals + m.GuestGoals);
+                var team = unitOfWork.Teams.GetTheTeamWithTheMostSchootedGoals();
+                PrintResult("Team mit den meisten geschossenen Toren", String.Format("{0}: {1} Tore",team.team.Name, team.goals.ToString()));
             }
                 
         }
