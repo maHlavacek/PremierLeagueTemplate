@@ -16,20 +16,11 @@ namespace PremierLeague.Persistence
             _dbContext = dbContext;
         }
 
-        public (Team team, int goals) GetTheTeamWithTheMostSchootedGoals()
+        public (Team team, int goals) TeamWithTheMostSchootedGoals()
         {
-
             return _dbContext.Teams.Select(t => ValueTuple.Create(t, t.HomeGames.Sum(h => h.HomeGoals) + t.AwayGames.Sum(a => a.GuestGoals)))
                 .OrderByDescending(t => t.Item2)
-                .FirstOrDefault();
-
-            //return _dbContext.Teams.Select(s => new
-            //{
-            //    Goals = s.HomeGames.Sum(w => w.HomeGoals) + s.AwayGames.Sum(w => w.GuestGoals),
-            //    Team = s.Name
-            //}
-            //);
-                        
+                .FirstOrDefault();     
         }
 
 
@@ -56,6 +47,29 @@ namespace PremierLeague.Persistence
         public void Add(Team team)
         {
             _dbContext.Teams.Add(team);
+        }
+
+        public (Team team, int goals) TeamWithTheMostSchootedAwayGoals()
+        {
+            return _dbContext.Teams.Select(t => ValueTuple.Create(t, t.AwayGames.Sum(a => a.GuestGoals)))
+                .OrderByDescending(t => t.Item2)
+                .FirstOrDefault();
+        }
+
+        public (Team team, int goals) TeamWithTheMostSchootedHomeGoals()
+        {
+            return _dbContext.Teams.Select(t => ValueTuple.Create(t, t.HomeGames.Sum(h => h.HomeGoals)))
+                .OrderByDescending(t => t.Item2)
+                .FirstOrDefault();
+        }
+
+        public (Team team, int rate) TeamWithTheBestGoalsRate()
+        {
+            return _dbContext.Teams.Select(t =>
+            ValueTuple.Create(t, (t.HomeGames.Sum(h => h.HomeGoals) + t.AwayGames.Sum(a => a.GuestGoals)) - (t.HomeGames.Sum(h => h.GuestGoals) + t.AwayGames.Sum(a => a.HomeGoals))))
+            .OrderByDescending(t => t.Item2)
+            .FirstOrDefault();
+
         }
     }
 }

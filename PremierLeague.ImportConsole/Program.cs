@@ -88,10 +88,20 @@ namespace PremierLeague.ImportConsole
         {
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                var team = unitOfWork.Teams.GetTheTeamWithTheMostSchootedGoals();
-                PrintResult("Team mit den meisten geschossenen Toren", String.Format("{0}: {1} Tore",team.team.Name, team.goals.ToString()));
+                var best = unitOfWork.Teams.TeamWithTheMostSchootedGoals();
+                PrintResult("Team mit den meisten geschossenen Toren", String.Format("{0}: {1} Tore",best.team.Name, best.goals));
+
+                var away = unitOfWork.Teams.TeamWithTheMostSchootedAwayGoals();
+                PrintResult("Team mit den meisten geschossenen Auswärtstoren", String.Format("{0}: {1} auswärtstore", away.team.Name, away.goals));
+
+                var home = unitOfWork.Teams.TeamWithTheMostSchootedHomeGoals();
+                PrintResult("Team mit den meisten geschossenen Heimtoren", String.Format("{0}: {1} Heimtore", home.team.Name, home.goals));
+
+                var rate = unitOfWork.Teams.TeamWithTheBestGoalsRate();
+                PrintResult("Team mit dem besten Torverhältnis", String.Format("{0}: {1} Torverhältnis", rate.team.Name, rate.rate));
+
             }
-                
+
         }
 
         /// <summary>
