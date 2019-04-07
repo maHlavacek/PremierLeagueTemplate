@@ -1,4 +1,5 @@
-﻿using PremierLeague.Core;
+﻿using ConsoleTables;
+using PremierLeague.Core;
 using PremierLeague.Core.Contracts;
 using PremierLeague.Core.Entities;
 using PremierLeague.Persistence;
@@ -100,6 +101,11 @@ namespace PremierLeague.ImportConsole
                 var rate = unitOfWork.Teams.TeamWithTheBestGoalsRate();
                 PrintResult("Team mit dem besten Torverhältnis", String.Format("{0}: {1} Torverhältnis", rate.team.Name, rate.rate));
 
+                var statistic = unitOfWork.Teams.AvgStatistic();
+                PrintResult("Team Leistung im Durchschnitt (Sortiert nach durschn. geschossene Tore pro Spiel [absteig.]):", ConsoleTable
+                                                                                                                             .From(statistic)
+                                                                                                                             .Configure(o => o.NumberAlignment = Alignment.Right)
+                                                                                                                             .ToStringAlternative());
             }
 
         }

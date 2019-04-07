@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PremierLeague.Core.Contracts;
+using PremierLeague.Core.DataTransferObjects;
 using PremierLeague.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -70,6 +71,21 @@ namespace PremierLeague.Persistence
             .OrderByDescending(t => t.Item2)
             .FirstOrDefault();
 
+        }
+
+        public IEnumerable<TeamStatisticDto> AvgStatistic()
+        {
+            return _dbContext.Teams.Select(t => new TeamStatisticDto
+            {
+                Name = t.Name,
+                AvgGoalsShotAtHome = t.HomeGames.Average(h => h.HomeGoals),
+                AvgGoalsShotOutwards = t.AwayGames.Average(a => a.GuestGoals),               
+                AvgGoalsShotInTotal = (t.AwayGames.Average(a => a.GuestGoals) + t.HomeGames.Average(h => h.HomeGoals)) / 2,
+                AvgGoalsGotAtHome = t.HomeGames.Average(h => h.GuestGoals),
+                AvgGoalsGotOutwards = t.AwayGames.Average(a => a.HomeGoals),
+                AvgGoalsGotInTotal = (t.AwayGames.Average(a => a.HomeGoals) + t.HomeGames.Average(h => h.GuestGoals)) / 2
+            }
+            ).OrderByDescending(o => o.AvgGoalsShotInTotal);
         }
     }
 }
