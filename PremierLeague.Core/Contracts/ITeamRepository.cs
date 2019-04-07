@@ -8,14 +8,10 @@ namespace PremierLeague.Core.Contracts
     public interface ITeamRepository
     {
         IEnumerable<Team> GetAllWithGames();
-        (Team team,int goals) TeamWithTheMostSchootedGoals();
-
-        (Team team, int goals) TeamWithTheMostSchootedAwayGoals();
-
-        (Team team, int goals) TeamWithTheMostSchootedHomeGoals();
-
+        (Team team,int goals) TeamWithTheMostShotGoals();
+        (Team team, int goals) TeamWithTheMostShotAwayGoals();
+        (Team team, int goals) TeamWithTheMostShotHomeGoals();
         (Team team, int rate) TeamWithTheBestGoalsRate();
-
         IEnumerable<TeamTableRowDto> TeamTable();
         IEnumerable<TeamStatisticDto> AvgStatistic();
         IEnumerable<Team> GetAll();

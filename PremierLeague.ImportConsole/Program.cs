@@ -6,6 +6,7 @@ using PremierLeague.Persistence;
 using Serilog;
 using System;
 using System.Linq;
+using Utils;
 
 namespace PremierLeague.ImportConsole
 {
@@ -71,7 +72,7 @@ namespace PremierLeague.ImportConsole
                     Log.Debug($"  Es wurden {games.Count()} Spiele eingelesen!");
 
                     // TODO: Teams aus den Games ermitteln
-                    var teams = games.Select(s => s.HomeTeam).Distinct();// Enumerable.Empty<Team>();
+                    var teams = games.Select(s => s.HomeTeam).Distinct();
                     Log.Debug($"  Es wurden {teams.Count()} Teams eingelesen!");
 
                     Log.Information("Daten werden in Datenbank gespeichert (in Context übertragen)");
@@ -87,15 +88,15 @@ namespace PremierLeague.ImportConsole
 
         private static void AnalyzeData()
         {
-            using (UnitOfWork unitOfWork = new UnitOfWork())
+            using (IUnitOfWork unitOfWork = new UnitOfWork())
             {
-                var best = unitOfWork.Teams.TeamWithTheMostSchootedGoals();
+                var best = unitOfWork.Teams.TeamWithTheMostShotGoals();
                 PrintResult("Team mit den meisten geschossenen Toren", String.Format("{0}: {1} Tore",best.team.Name, best.goals));
 
-                var away = unitOfWork.Teams.TeamWithTheMostSchootedAwayGoals();
+                var away = unitOfWork.Teams.TeamWithTheMostShotAwayGoals();
                 PrintResult("Team mit den meisten geschossenen Auswärtstoren", String.Format("{0}: {1} auswärtstore", away.team.Name, away.goals));
 
-                var home = unitOfWork.Teams.TeamWithTheMostSchootedHomeGoals();
+                var home = unitOfWork.Teams.TeamWithTheMostShotHomeGoals();
                 PrintResult("Team mit den meisten geschossenen Heimtoren", String.Format("{0}: {1} Heimtore", home.team.Name, home.goals));
 
                 var rate = unitOfWork.Teams.TeamWithTheBestGoalsRate();
