@@ -16,6 +16,7 @@ namespace PremierLeague.Core.Contracts
 
         (Team team, int rate) TeamWithTheBestGoalsRate();
 
+        IEnumerable<TeamTableRowDto> TeamTable();
         IEnumerable<TeamStatisticDto> AvgStatistic();
         IEnumerable<Team> GetAll();
         void AddRange(IEnumerable<Team> teams);

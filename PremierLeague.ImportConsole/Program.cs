@@ -102,10 +102,16 @@ namespace PremierLeague.ImportConsole
                 PrintResult("Team mit dem besten Torverhältnis", String.Format("{0}: {1} Torverhältnis", rate.team.Name, rate.rate));
 
                 var statistic = unitOfWork.Teams.AvgStatistic();
-                PrintResult("Team Leistung im Durchschnitt (Sortiert nach durschn. geschossene Tore pro Spiel [absteig.]):", ConsoleTable
-                                                                                                                             .From(statistic)
-                                                                                                                             .Configure(o => o.NumberAlignment = Alignment.Right)
-                                                                                                                             .ToStringAlternative());
+                PrintResult("Team Leistung im Durchschnitt (Sortiert nach durschn. geschossene Tore pro Spiel [absteig.]):",
+                    ConsoleTable.From(statistic)
+                    .Configure(o => o.NumberAlignment = Alignment.Right)
+                    .ToStringAlternative());
+
+                var teamTable = unitOfWork.Teams.TeamTable();
+                PrintResult("Team Tabelle (sortiert nach Rang):",
+                     ConsoleTable.From(teamTable)
+                     .Configure(o => o.NumberAlignment = Alignment.Right)
+                     .ToStringAlternative());
             }
 
         }
